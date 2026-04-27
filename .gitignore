@@ -1,0 +1,24 @@
+# Node
+node_modules/
+dist/
+.env
+.env.local
+
+# Java / Maven
+backend/target/
+backend/mvnw.cmd
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+
+# Test scratch files
+backend/src/test/java/com/pharmadesk/backend/HashTest.java
+backend/src/test/java/com/pharmadesk/backend/HashTest.class

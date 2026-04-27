@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: backend
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/pms?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: Eakhal@2004
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    # Specify locations explicitly if needed, but defaults to classpath:db/migration
+
+jwt:
+  secret: a89f67d4e3b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7
+  expirationMs: 86400000 # 24 hours
