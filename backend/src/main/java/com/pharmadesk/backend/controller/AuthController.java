@@ -26,23 +26,29 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody Map<String, String> loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.get("username"), loginRequest.get("password")));
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.get("username"), loginRequest.get("password")));
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateJwtToken(authentication);
 
-        com.pharmadesk.backend.model.User user = userRepository.findByUsername(loginRequest.get("username"))
-                .orElseThrow(() -> new org.springframework.security.authentication.BadCredentialsException("User not found"));
+            com.pharmadesk.backend.model.User user = userRepository.findByUsername(loginRequest.get("username"))
+                    .orElseThrow(() -> new org.springframework.security.authentication.BadCredentialsException("User not found"));
 
-        return ResponseEntity.ok(Map.of(
-            "token", jwt,
-            "user", Map.of(
-                "username", user.getUsername(),
-                "role", user.getRole(),
-                "name", user.getName() != null ? user.getName() : user.getUsername()
-            )
-        ));
+            return ResponseEntity.ok(Map.of(
+                "token", jwt,
+                "user", Map.of(
+                    "username", user.getUsername(),
+                    "role", user.getRole(),
+                    "name", user.getName() != null ? user.getName() : user.getUsername()
+                )
+            ));
+        } catch (org.springframework.security.core.AuthenticationException e) {
+            System.err.println("Authentication failed for user: " + loginRequest.get("username") + " | Error: " + e.getMessage());
+            return ResponseEntity.status(org.springframework.http.HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message", "Invalid username or password"));
+        }
     }
 
     @PostMapping("/logout")
