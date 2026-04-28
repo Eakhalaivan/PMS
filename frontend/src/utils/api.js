@@ -2,12 +2,17 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL: import.meta.env.VITE_API_URL || '',
 });
 
-// Request interceptor – attach JWT token from localStorage
+// Request interceptor – attach JWT token and ensure /api prefix
 api.interceptors.request.use(
   (config) => {
+    // Prepend /api if it's missing from the URL and it's a relative path
+    if (config.url && !config.url.startsWith('/api') && !config.url.startsWith('http')) {
+      config.url = `/api${config.url.startsWith('/') ? '' : '/'}${config.url}`;
+    }
+
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
