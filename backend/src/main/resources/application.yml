@@ -30,7 +30,7 @@ spring:
             enable: true
 
 cors:
-  allowed-origin: ${CORS_ALLOWED_ORIGIN}
+  allowed-origin: ${CORS_ALLOWED_ORIGIN:http://localhost:5173}
 
 jwt:
   secret: ${JWT_SECRET}
